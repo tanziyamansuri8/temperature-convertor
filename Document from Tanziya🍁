@@ -1,75 +1,50 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-:root {
-  font-family: "Roboto", sans-serif;
-  --color: rgb(43, 68, 180);
-  --color2: rgb(157, 239, 241);
-}
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    330deg,
-    var(--color) 10%,
-    var(--color2) 80%
-  );
-  font-size: 20px;
-}
-label {
-  font-size: 40px;
-  letter-spacing: 2px;
-  font-weight: bold;
-}
-input {
-  margin: 50px 0 10px;
-  padding: 7px;
-  font-size: 20px;
-}
-.result {
-  margin: 10px 0 50px;
-  font-size: 26px;
-  color: rgb(255, 255, 102);
-  letter-spacing: 1px;
-  height: 1em;
-  font-weight: bold;
+const converter = document.querySelector('#converter');
+const result = document.querySelector('.result');
+const convertButton = document.querySelector('.convertButton');
+const resetButton = document.querySelector('.resetButton');
+const changeButton = document.querySelector('.changeButton');
+const C = document.querySelector('.C')
+const F = document.querySelector('.F')
+
+const swap = () => {
+    if (C.innerHTML === '°C') {
+        C.innerHTML = '°F';
+        F.innerHTML = '°C';
+        document.title = "Converter °F to °C";
+        converter.placeholder = "°F";
+
+    } else {
+        F.innerHTML = '°F';
+        C.innerHTML = '°C';
+        document.title = "Converter °C to °F";
+        converter.placeholder = "°C";
+    };
+};
+
+const reset = () => {
+    converter.value = '';
+    result.innerHTML = '';
 }
 
-button {
-  width: 200px;
-  margin: 0 30px;
-  padding: 10px 30px;
-  background: none;
-  border: 2px solid var(--color);
-  border-radius: 5px;
-  color: var(--color2);
-  font-size: 25px;
-  transition: color 0.3s, box-shadow 0.3s;
-  box-shadow: 3px 3px 10px var(--color);
-  text-transform: uppercase;
-  cursor: pointer;
-}
-button:hover {
-  color: var(--color);
-  box-shadow: 3px 3px 10px var(--color2);
+const convert = () => {
+    if (/^(-?)(\d+)(\.{1}\d+)?$/.test(converter.value)) {
+        result.style.color = "yellow"
+        if (C.innerHTML === '°C') {
+            let value = (converter.value * 1.8) + 32;
+            result.innerHTML = `${converter.value}°C to ${value.toFixed(2)}°F`;
+        } else {
+            let value = (converter.value - 32) / 1.8;
+            result.innerHTML = `${converter.value}°F to ${value.toFixed(2)}°C`;
+        }
+    } else if (converter.value == '') {
+        result.style.color = "#993300"
+        result.innerHTML = 'Write correct value!';
+    } else {
+        result.style.color = "#993300"
+        result.innerHTML = 'Wrong value!';
+    }
 }
 
-/* ------> Media queries <------ */
-@media screen and (max-width: 500px){ /*Smartphones*/
-  label{
-    font-size: 35px;
-  }
-}
-@media screen and (max-width: 1000px) {/*Bigger screens*/
-  button {
-    display: flex;
-    margin-bottom: 20px;
-    justify-content: center;
-  }
-}
+changeButton.addEventListener('click', swap);
+resetButton.addEventListener('click', reset);
+convertButton.addEventListener('click', convert);
